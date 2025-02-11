@@ -1,5 +1,7 @@
 # SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HarleyCoops/OneShotGRPO/blob/main/PublicWorkingGRPO%20copy.ipynb)
+
 ## Overview
 
 This project explores how small a language model can be while still effectively reasoning through complex math problems. Building on a pre-existing model (derived from the Qwen 2.5 .5B distilled version), we continue fine-tuning using the high-quality, synthetic Open-R1-Math-220k dataset. This dataset, with its extensive chain-of-thought reasoning examples, offers a significant improvement in data quality and quantity compared to GSM8K.
@@ -95,7 +97,7 @@ This project explores how small a language model can be while still effectively 
 ### 5. Reward Functions and Answer Extraction
 
 - **Primary Reward:**  
-  The `correctness_reward_func` compares the model’s extracted answer with the ground truth using a small tolerance to account for floating-point inaccuracies.
+  The `correctness_reward_func` compares the model's extracted answer with the ground truth using a small tolerance to account for floating-point inaccuracies.
 
 - **Adapting Answer Extraction:**  
   Modify or create an extraction function (e.g., `extract_openr1_answer`) to adapt to the output format from Open-R1.
@@ -119,7 +121,7 @@ This project explores how small a language model can be while still effectively 
   Keep `num_generations` at 16 to ensure ample exploration.
 
 - **Validation:**  
-  Use the dataset’s validation split for continuous evaluation and early stopping to prevent overfitting.
+  Use the dataset's validation split for continuous evaluation and early stopping to prevent overfitting.
 
 ### 7. Training and Evaluation
 
@@ -158,4 +160,4 @@ This project is open-sourced under the MIT License.
 
 ---
 
-This README outlines the project’s purpose and the detailed steps required to integrate and fine-tune a smaller model using the Open-R1-Math-220k dataset. As the project evolves, feel free to adapt these instructions and contribute improvements.
+This README outlines the project's purpose and the detailed steps required to integrate and fine-tune a smaller model using the Open-R1-Math-220k dataset. As the project evolves, feel free to adapt these instructions and contribute improvements.
