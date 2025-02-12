@@ -1,10 +1,10 @@
-# SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset
+# SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset (2% Training)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HarleyCoops/OneShotGRPO/blob/main/PublicWorkingGRPO%20copy.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](Qwen2.5-.5BOpenR1.ipynb)
 
 ## Overview
 
-This project explores how small a language model can be while still effectively reasoning through complex math problems. Building on a pre-existing model (derived from the Qwen 2.5 .5B distilled version), we continue fine-tuning using the high-quality, synthetic Open-R1-Math-220k dataset. This dataset, with its extensive chain-of-thought reasoning examples, offers a significant improvement in data quality and quantity compared to GSM8K.
+This project demonstrates a 2% trained version of a small language model (0.5B parameters) on the Open-R1-Math-220k dataset. Building on the Qwen 2.5 0.5B distilled version, we've fine-tuned the model on a subset of the data to explore how effectively a small model can learn mathematical reasoning. This serves as a proof of concept for efficient fine-tuning with limited computational resources.
 
 ## Project Goals
 
