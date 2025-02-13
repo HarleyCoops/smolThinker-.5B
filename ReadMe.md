@@ -1,4 +1,4 @@
-# SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset (2% Training)
+# SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset (50% Training running)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HarleyCoops/smolThinker-.5B/blob/main/Qwen2.5-.5BOpenR1.ipynb)
 
