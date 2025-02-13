@@ -4,32 +4,29 @@
 
 ## Overview
 
-
 So what is the smallest language model that can be trained on how specific of a math problem? This is the first deployed version of the Open-R1-Math-220k dataset fine-tuned on the Qwen 2.5 0.5B distilled version.
 
 This project demonstrates a 2% trained version of a small language model (0.5B parameters) on the Open-R1-Math-220k dataset. Building on the Qwen 2.5 0.5B distilled version, I've fine-tuned the model on a subset of the data to explore how effectively a small model can learn mathematical reasoning. This is proof of concept for efficient fine-tuning with limited computational resources. I will train this over the next two days and see how far I get. 
 
-The setup is simple. You need a colap pro account with A100 GPU access. You need 40 GB to train this model. Run each cell, and eventually publish the fully trained model to your HuggingFace account. The python script can be used to call back to your model for inference, through the terminal. 
+The setup is simple. You need a Colab Pro account with A100 GPU access. You need 40 GB to train this model. Run each cell, and eventually publish the fully trained model to your HuggingFace account. The python script can be used to call back to your model for inference, through the terminal. 
 
 You can then deploy with HF inference to set up api calls to your endpoint. 
 
 ## Project Goals
 
-- **Enhanced Reasoning:** Enable the model to perform complex mathematical reasoning using chain-of-thought processes.
-- **Data Leverage:** Utilize the larger Open-R1-Math-220k dataset (220k examples) to further fine-tune and improve model performance.
-- **Efficient Fine-Tuning:** Continue fine-tuning from an already distilled model to retain learned knowledge while pushing reasoning capabilities further.
-- **SmolAgent Integration:** Integrate with the HuggingFace SmolAgent class, ensuring the refined model seamlessly interacts with smolagent pipelines.
+- **Enhanced Mathematical Reasoning:** Enable the model to perform complex mathematical reasoning using chain-of-thought processes with the Open-R1-Math-220k dataset.
+- **Efficient Small Model Training:** Explore the capabilities of a 0.5B parameter model on focused mathematical tasks.
+- **Scalable Training Process:** Document the training process from 2% to full dataset training.
+- **SmolAgent Integration:** Integrate with the HuggingFace SmolAgent class for seamless deployment and inference.
 
 ## Workflow and Implementation Steps
 
 ### 1. Access and Load the Dataset
 
 - **Dataset Information:**  
-  Confirm the full identifier on Hugging Face (assumed here as `open-r1-math-220k`).
+  The Open-R1-Math-220k dataset is available on Hugging Face as `open-r1-math-220k`.
 
 - **Loading the Dataset:**  
-  Utilize the Hugging Face `datasets` library to load the dataset and inspect its structure.
-
   ```python
   from datasets import load_dataset
 
@@ -38,122 +35,66 @@ You can then deploy with HF inference to set up api calls to your endpoint.
   print(openr1_dataset['train'][0])
   ```
 
-### 2. Understand the Dataset Structure
+### 2. Dataset Structure
 
-- **Key Fields Identification:**  
-  Assess each example to locate:
-  - **Problem Statement:** Typically stored under keys like `"instruction"`, `"input"`, or similar.
-  - **Chain-of-Thought Reasoning:** Potentially found under keys like `"rationale"`, `"reasoning"`, or `"chain_of_thought"`.
-  - **Final Answer:** Expected keys include `"answer"`, `"solution"`, or `"output"`.
+- **Key Fields:**  
+  Each example in the Open-R1-Math-220k dataset contains:
+  - **Problem Statement:** The mathematical question or problem
+  - **Chain-of-Thought Reasoning:** Step-by-step solution process
+  - **Final Answer:** The numerical or textual solution
 
-- **XML Format Consistency:**  
-  Since the model was originally trained to generate outputs in an XML format (with `<reasoning>` and `<final_answer>` tags), ensure that the dataset either already conforms to or can be easily converted into this structure.
+### 3. Training Process
 
-### 3. Adapt Data Preprocessing
+- **Initial Training (2%):**
+  - Using a subset of the Open-R1-Math-220k dataset
+  - Training on A100 GPU with 40GB memory
+  - Monitoring progress with Weights & Biases
 
-- **Create a New Data Loader:**  
-  Develop a function, for instance, `get_openr1_questions`, modeled after the existing `get_gsm8k_questions`, to extract the necessary fields from each example.
+- **Scaling Up:**
+  - Progressive training on larger portions of the dataset
+  - Checkpoint saving every 100 steps
+  - Performance monitoring and validation
 
-  ```python
-  def get_openr1_questions(dataset, split="train"):
-      questions = []
-      answers = []
-      reasonings = []
+### 4. Deployment
 
-      for example in dataset[split]:
-          # Adjust the field names based on your dataset's specifics.
-          question = example["instruction"]  
-          output = example["output"]
+- **Model Publishing:**
+  - Upload trained model to HuggingFace Hub
+  - Set up inference endpoint
+  - Terminal-based inference using provided Python script
 
-          # Locate the answer boundary using the last occurrence of '='
-          answer_start_index = output.rfind("=") + 1
-          reasoning = output[:answer_start_index]
-          answer = output[answer_start_index:].strip()
+### 5. Inference
 
-          questions.append(question)
-          answers.append(answer)
-          reasonings.append(reasoning)
+- **Local Usage:**
+  - Run inference through terminal commands
+  - Get step-by-step reasoning and solutions
+  - Save results in JSONL format
 
-      return questions, answers, reasonings
+- **API Integration:**
+  - HuggingFace Inference API setup
+  - Endpoint configuration
+  - Response formatting
 
-  # Usage example:
-  openr1_questions, openr1_answers, openr1_reasonings = get_openr1_questions(openr1_dataset)
-  ```
+## Getting Started
 
-### 4. Modify Training Data Loading
+1. **Setup Requirements:**
+   - Colab Pro account
+   - A100 GPU access (40GB memory)
+   - HuggingFace account for model hosting
 
-- **Update the Trainer:**  
-  Replace references to the GSM8K dataset with data extracted from the Open-R1 dataset. When setting up the `GRPOTrainer`, pass the processed questions (and corresponding evaluation data) accordingly.
+2. **Training:**
+   - Open the Colab notebook
+   - Run setup cells
+   - Monitor training progress
+   - Save checkpoints
 
-  ```python
-  train_questions, train_answers, train_reasonings = get_openr1_questions(openr1_dataset)
-
-  trainer = GRPOTrainer(
-      model,
-      args=training_args,
-      train_dataset=train_questions,  # Directly use the questions
-      eval_dataset=val_questions,
-      tokenizer=tokenizer,
-      compute_metrics=None,  # Metrics handled via custom reward functions
-      grpo_loss_kwargs={
-          "answer_grounding_loss_weight": answer_grounding_loss_weight,
-      }
-  )
-  ```
-
-### 5. Reward Functions and Answer Extraction
-
-- **Primary Reward:**  
-  The `correctness_reward_func` compares the model's extracted answer with the ground truth using a small tolerance to account for floating-point inaccuracies.
-
-- **Adapting Answer Extraction:**  
-  Modify or create an extraction function (e.g., `extract_openr1_answer`) to adapt to the output format from Open-R1.
-
-  ```python
-  def extract_openr1_answer(generated_text):
-      answer_start_index = generated_text.rfind("=") + 1
-      return generated_text[answer_start_index:].strip()
-  ```
-
-- **Format-Related Rewards:**  
-  If the Open-R1 dataset maintains a consistent reasoning structure, you can simplify or even reduce reliance on strict format reward functions.
-
-### 6. Adjust Training Hyperparameters
-
-- **Epochs & Learning Rate:**  
-  Given the larger dataset, consider starting with one epoch to monitor overfitting, and experiment with a reduced learning rate (e.g., 1e-6).
-- **Batch Size & Accumulation:**  
-  Maintain a `per_device_train_batch_size` of 1 and adjust `gradient_accumulation_steps` based on your GPU capacity.
-- **Exploration Steps:**  
-  Keep `num_generations` at 16 to ensure ample exploration.
-
-- **Validation:**  
-  Use the dataset's validation split for continuous evaluation and early stopping to prevent overfitting.
-
-### 7. Training and Evaluation
-
-- **Execute Training:**  
-  Run the modified training script with the Open-R1 data. Monitor both the loss and reward metrics through tools like Weights & Biases.
-- **Iterative Testing:**  
-  Begin with a small subset (e.g., 100 examples) to ensure proper data extraction and processing, and then scale up.
-
-### 8. Inference Pipeline
-
-- **Seamless Integration:**  
-  The inference pipeline (e.g., in `hf_grpotuned_pipeline.py`) should remain largely unchanged, as long as the extraction function correctly parses model outputs according to the expected XML format.
-
-## Debugging and Iteration
-
-- **Verbose Logging:**  
-  Print processed data, extracted answers, and reward values to verify that each step is functioning as expected.
-- **Incremental Development:**  
-  Start with a limited number of examples to quickly iterate over changes. After verifying functionality on a small scale, move on to the complete dataset.
-- **Hyperparameter Tuning:**  
-  Experiment with different training configurations and reward weights to observe impacts on model performance.
+3. **Deployment:**
+   - Push model to HuggingFace
+   - Configure inference endpoint
+   - Test with provided Python script
 
 ## Contributing
 
-Contributions to improve the data processing functions, training pipeline, and reward mechanisms are welcome. Fork the repository, make your modifications, and open an issue or pull request for discussion and inclusion.
+Contributions to improve the training process, inference pipeline, and documentation are welcome. Feel free to fork the repository and submit pull requests.
 
 ## License
 
@@ -161,10 +102,10 @@ This project is open-sourced under the MIT License.
 
 ## Acknowledgements
 
-- Thanks to the Hugging Face team for the `datasets` library.
-- Appreciation to the contributors of the Open-R1-Math-220k dataset.
-- Gratitude to community members exploring advanced chain-of-thought reasoning methodologies.
+- Thanks to the Hugging Face team for the infrastructure and tools
+- Appreciation to the creators of the Open-R1-Math-220k dataset
+- Thanks to the Qwen team for the base model
 
 ---
 
-This README outlines the project's purpose and the detailed steps required to integrate and fine-tune a smaller model using the Open-R1-Math-220k dataset. As the project evolves, feel free to adapt these instructions and contribute improvements.
+This README outlines the project's purpose and the detailed steps required to train and deploy a small but effective math reasoning model. As the training progresses beyond 2%, updates will be made to reflect new findings and improvements.
