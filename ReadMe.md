@@ -6,7 +6,7 @@
 
 ## Project Update - Feb 13, 2025 
 
-50% training is underway but we are noticing context window limits during training. In order to fit under 40GB of RAM, you need to train Qwen with a maximum token limit of roughly 256. Upon inference, you can ask for longer outputs, but the prompts are so long in these models that training requires a larger GPU than what is available on Colab.
+50% training is underway but I am noticing context window limits during training. In order to fit under 40GB of RAM, you need to train Qwen with a maximum token limit of roughly 256. Upon inference, you can ask for longer outputs, but the prompts are so long in these models that training requires a larger GPU than what is available on Colab.
 
 This is a 50% run proof of concept using smaller context windows, a full R1 run with larger context windows will require an H100 which I will launch later today. 
 
