@@ -1,6 +1,16 @@
 # SmolAgent Fine-Tuning with the Open-R1-Math-220k Dataset (2% Training)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](Qwen2.5-.5BOpenR1.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/HarleyCoops/smolThinker-.5B/blob/main/Qwen2.5-.5BOpenR1.ipynb)
+
+
+
+## Project Update - Feb 13, 2025 
+
+50% training is underway but we are noticing context window limits during training. In order to fit under 40GB of RAM, you need to train Qwen with a maximum token limit of roughly 256. Upon inference, you can ask for longer outputs, but the prompts are so long in these models that training requires a larger GPU than what is available on Colab.
+
+This is a 50% run proof of concept using smaller context windows, a full R1 run with larger context windows will require an H100 which I will launch later today. 
+
+For more details, see the run on [Weights & Biases](https://wandb.ai/christian-cooper-us/qwen-OpenR1math-50.00?nw=nwuserchristiancooperus).
 
 ## Overview
 
