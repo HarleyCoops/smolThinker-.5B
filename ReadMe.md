@@ -4,7 +4,14 @@
 
 ## Overview
 
-This project demonstrates a 2% trained version of a small language model (0.5B parameters) on the Open-R1-Math-220k dataset. Building on the Qwen 2.5 0.5B distilled version, we've fine-tuned the model on a subset of the data to explore how effectively a small model can learn mathematical reasoning. This serves as a proof of concept for efficient fine-tuning with limited computational resources.
+
+So what is the smallest language model that can be trained on how specific of a math problem? This is the first deployed version of the Open-R1-Math-220k dataset fine-tuned on the Qwen 2.5 0.5B distilled version.
+
+This project demonstrates a 2% trained version of a small language model (0.5B parameters) on the Open-R1-Math-220k dataset. Building on the Qwen 2.5 0.5B distilled version, I've fine-tuned the model on a subset of the data to explore how effectively a small model can learn mathematical reasoning. This is proof of concept for efficient fine-tuning with limited computational resources. I will train this over the next two days and see how far I get. 
+
+The setup is simple. You need a colap pro account with A100 GPU access. You need 40 GB to train this model. Run each cell, and eventually publish the fully trained model to your HuggingFace account. The python script can be used to call back to your model for inference, through the terminal. 
+
+You can then deploy with HF inference to set up api calls to your endpoint. 
 
 ## Project Goals
 
