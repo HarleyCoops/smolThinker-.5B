@@ -1,0 +1,10 @@
+{
+  "dataset_name": "open-r1/OpenR1-Math-220k",
+  "reward_functions": {
+    "correctness_reward": {
+      "name": "correctness_reward",
+      "description": "Compare completion answer with ground truth",
+      "type": "correctness"
+    }
+  }
+}

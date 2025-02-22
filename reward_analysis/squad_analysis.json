@@ -1,0 +1,20 @@
+{
+  "has_numerical_answers": false,
+  "has_text_answers": false,
+  "has_multi_step": false,
+  "has_variables": false,
+  "has_equations": false,
+  "answer_patterns": [],
+  "reasoning_patterns": [],
+  "typical_step_count": 0,
+  "max_answer_length": 0,
+  "columns": [
+    "id",
+    "title",
+    "context",
+    "question",
+    "answers"
+  ],
+  "question_column": "question",
+  "answer_column": "answers"
+}

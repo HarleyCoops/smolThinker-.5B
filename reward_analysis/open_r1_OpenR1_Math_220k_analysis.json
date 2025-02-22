@@ -1,0 +1,29 @@
+{
+  "has_numerical_answers": false,
+  "has_text_answers": false,
+  "has_multi_step": false,
+  "has_variables": false,
+  "has_equations": false,
+  "answer_patterns": [],
+  "reasoning_patterns": [],
+  "typical_step_count": 0,
+  "max_answer_length": 0,
+  "columns": [
+    "problem",
+    "solution",
+    "answer",
+    "problem_type",
+    "question_type",
+    "source",
+    "uuid",
+    "is_reasoning_complete",
+    "generations",
+    "correctness_math_verify",
+    "correctness_llama",
+    "finish_reasons",
+    "correctness_count",
+    "messages"
+  ],
+  "question_column": "question_type",
+  "answer_column": "answer"
+}

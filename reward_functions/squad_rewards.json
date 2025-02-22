@@ -1,0 +1,10 @@
+{
+  "dataset_name": "squad",
+  "reward_functions": {
+    "correctness_reward": {
+      "name": "correctness_reward",
+      "description": "Compare completion answer with ground truth",
+      "type": "correctness"
+    }
+  }
+}
