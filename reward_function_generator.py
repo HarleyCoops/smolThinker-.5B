@@ -275,31 +275,66 @@ def step_clarity_reward(completions, **kwargs) -> List[float]:
         
         with open(output_path, 'w') as f:
             # Format the code properly
-            code = [
+            code_parts = []
+            
+            # Imports
+            code_parts.extend([
                 "import re",
                 "from typing import List, Dict",
                 "",
+                "# Helper functions",
                 helpers.strip(),
                 "",
-                correctness_func.strip(),
+                "# Reward functions",
+                correctness_func.strip().replace("'", '"'),
                 "",
-                format_func.strip(),
+                format_func.strip().replace("'", '"'),
                 "",
-                reasoning_func.strip(),
+                reasoning_func.strip().replace("'", '"').replace("[=+\\-*/\\^]", "[=+\\\\-*/\\\\^]"),
                 "",
-                step_clarity_func.strip(),
+                step_clarity_func.strip().replace("'", '"'),
                 "",
                 "# Reward function weights",
                 "REWARD_WEIGHTS = {",
-                "    'correctness_reward': 1.0,",
-                "    'format_reward': 0.5,",
-                "    'reasoning_quality_reward': 0.3,",
-                "    'step_clarity_reward': 0.2",
+                '    "correctness_reward": 1.0,',
+                '    "format_reward": 0.5,',
+                '    "reasoning_quality_reward": 0.3,',
+                '    "step_clarity_reward": 0.2',
                 "}"
-            ]
+            ])
+            
+            # Join code parts with proper line endings
+            final_code = "\n".join(code_parts)
+            
+            # Fix function parameters and syntax
+            replacements = {
+                "(prompts completions": "(prompts, completions",
+                "(completions **kwargs": "(completions, **kwargs",
+                "Dict[str bool]": "Dict[str, bool]",
+                "min(steps * 0.1 0.3": "min(steps * 0.1, 0.3)",
+                "min(score 1.0": "min(score, 1.0)",
+                "max(0.0 score": "max(0.0, score)",
+                "re.search(r\"<answer>.*?</answer>\" text": "re.search(r\"<answer>.*?</answer>\", text",
+                "re.search(r\"<reasoning>.*?</reasoning>\" text": "re.search(r\"<reasoning>.*?</reasoning>\", text",
+                "re.search(r\"=.*=\" reasoning": "re.search(r\"=.*=\", reasoning",
+                "re.search(r\"[A-Za-z]{3}\" reasoning": "re.search(r\"[A-Za-z]{3,}\", reasoning",
+                "isinstance(answer_data dict": "isinstance(answer_data, dict",
+                "isinstance(answer_data['text'] list": "isinstance(answer_data['text'], list",
+                "re.match(r'^[0-9]+[).] ' step.strip()": "re.match(r'^[0-9]+[).] ', step.strip())",
+                "['first' 'then' 'next' 'finally']": "['first', 'then', 'next', 'finally']",
+                "r\"<answer>[ \\t]*(.*?)[ \\t]*</answer>\"": "r\"<answer>\\s*(.*?)\\s*</answer>\"",
+                "r\"<reasoning>[ \\t]*(.*?)[ \\t]*</reasoning>\"": "r\"<reasoning>\\s*(.*?)\\s*</reasoning>\"",
+                ", re.DOTALL text": ", text, re.DOTALL",
+                "re.DOTALL text": "text, re.DOTALL"
+            }
+            
+            final_code = code_parts
+            for old, new in replacements.items():
+                final_code = [part.replace(old, new) for part in final_code]
+            final_code = "\n".join(final_code)
             
             # Write the formatted code
-            f.write("\n".join(code))
+            f.write(final_code)
         
         return str(output_path)
 
