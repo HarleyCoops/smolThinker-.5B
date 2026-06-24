@@ -1,14 +1,14 @@
 datasets>=5.0.0
 transformers>=5.12.1
-torch>=2.12.0
+torch>=2.12.1
 scikit-learn>=1.9.0
 peft>=0.19.1
 accelerate>=1.14.0
 bitsandbytes>=0.49.2
 tqdm>=4.68.3
-numpy>=2.4.6
+numpy>=2.5.0
 pandas>=3.0.3
 sentencepiece>=0.2.1
 protobuf>=7.35.1
 tensorboard>=2.20.0
-wandb>=0.27.2 
+wandb>=0.28.0 
