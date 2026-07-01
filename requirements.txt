@@ -10,5 +10,5 @@ numpy>=2.5.0
 pandas>=3.0.3
 sentencepiece>=0.2.1
 protobuf>=7.35.1
-tensorboard>=2.20.0
+tensorboard>=2.21.0
 wandb>=0.28.0 
