@@ -1,8 +1,8 @@
-datasets>=5.1.0
-transformers>=5.22.2
+datasets>=5.2.0
+transformers>=5.23.0
 torch>=2.15.0
 scikit-learn>=1.9.1
-peft>=0.21.2
+peft>=0.21.3
 accelerate>=1.15.0
 bitsandbytes>=0.50.2
 tqdm>=4.70.1
